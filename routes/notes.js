@@ -22,7 +22,7 @@ router.post('/', (req, res) => {
       const ids = notes.map(note => note.id)
       const maxId = Math.max(...ids)
       const newNote = new Note({
-        userId: 1,
+        userId: note.userId,
         id: maxId + 1,
         content: note.content,
         learned: note.learned
@@ -35,22 +35,19 @@ router.post('/', (req, res) => {
 })
 
 router.get('/:id', (req, res) => {
-  const id = Number(req.params.id)
-  Note.find()
-    .then(notes => {
-      const note = notes.find(note => note.id === id)
-
+  const id = req.params.id
+  Note.findById(id)
+    .then(note => {
       if (note) {
         return res.json(note)
       }
-
       res.status(404).end()
     })
     .catch(error => res.json(error))
 })
 
 router.delete('/:id', (req, res) => {
-  const id = Number(req.params.id)
+  const id = req.params.id
   Note.deleteOne({ id: id })
     .then(result => res.json(result))
     .catch(error => res.json(error))
