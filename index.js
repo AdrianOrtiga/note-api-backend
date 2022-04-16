@@ -5,25 +5,24 @@ const cors = require('cors')
 app.use(cors())
 app.use(express.json())
 
-const db = require('./mongoose')
-db.on('error', (error) => console.error(error))
-db.once('open', () => console.log('Connected to Database'))
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config()
+}
+
+require('./mongoose')
 
 // routes
 const notesRoute = require('./routes/notes')
+const notFound = require('./middleware/notFound')
+const handleErrors = require('./middleware/handleErrors')
 
 app.get('/', (req, res) => {
   res.send('hello world')
 })
 
 app.use('/api/notes', notesRoute)
-
-app.use((req, res) => {
-  console.log(req.path)
-  res.status(404).json({
-    error: 'Not found'
-  })
-})
+app.use(notFound)
+app.use(handleErrors)
 
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {

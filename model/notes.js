@@ -12,11 +12,19 @@ const noteScheme = mongoose.Schema({
   },
   learned: {
     type: Boolean,
-    required: false
+    default: false
   },
   date: {
     type: Date,
     default: Date.now()
+  }
+})
+
+noteScheme.set('toJSON', {
+  transform: (document, returnedObject) => {
+    returnedObject.id = returnedObject._id
+    delete returnedObject._id
+    delete returnedObject.__v
   }
 })
 
