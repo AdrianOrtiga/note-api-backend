@@ -7,18 +7,24 @@
     "dev": "nodemon index.js",
     "start": "node index.js",
     "lint": "eslint .",
-    "test": "standard && node my-tests.js"
+    "test": "cross-env NODE_ENV=test PORT=1234 jest --verbose --silent --detectOpenHandles",
+    "testUsers": "cross-env NODE_ENV=test PORT=1235 jest --verbose --silent tests/users.test.js",
+    "test:watch": "npm run test -- --watch"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "dotenv": "16.0.0",
+    "jest": "27.5.1",
     "nodemon": "2.0.15",
-    "standard": "16.0.4"
+    "standard": "16.0.4",
+    "supertest": "6.2.2"
   },
   "dependencies": {
+    "bcrypt": "^5.0.1",
     "cors": "2.8.5",
+    "cross-env": "7.0.3",
     "express": "4.17.3",
     "mongoose": "6.3.0"
   },

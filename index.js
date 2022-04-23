@@ -13,6 +13,7 @@ require('./mongoose')
 
 // routes
 const notesRoute = require('./routes/notes')
+const usersRoute = require('./routes/users')
 const notFound = require('./middleware/notFound')
 const handleErrors = require('./middleware/handleErrors')
 
@@ -21,10 +22,13 @@ app.get('/', (req, res) => {
 })
 
 app.use('/api/notes', notesRoute)
+app.use('/api/users', usersRoute)
 app.use(notFound)
 app.use(handleErrors)
 
 const PORT = process.env.PORT || 3001
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
+
+module.exports = { app, server }

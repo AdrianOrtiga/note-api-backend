@@ -1,14 +1,9 @@
 const mongoose = require('mongoose')
 
-const noteScheme = mongoose.Schema({
-  userId: {
-    type: Number,
-    required: true
-  },
+const noteSchema = mongoose.Schema({
   content: {
     type: String,
-    required: true,
-    unique: true
+    required: true
   },
   learned: {
     type: Boolean,
@@ -17,10 +12,15 @@ const noteScheme = mongoose.Schema({
   date: {
     type: Date,
     default: Date.now()
+  },
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
   }
 })
 
-noteScheme.set('toJSON', {
+noteSchema.set('toJSON', {
   transform: (document, returnedObject) => {
     returnedObject.id = returnedObject._id
     delete returnedObject._id
@@ -28,4 +28,4 @@ noteScheme.set('toJSON', {
   }
 })
 
-module.exports = mongoose.model('Note', noteScheme)
+module.exports = mongoose.model('Note', noteSchema)

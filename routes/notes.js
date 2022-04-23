@@ -55,7 +55,7 @@ router.put('/:id', (req, res, next) => {
 
 router.delete('/:id', (req, res, next) => {
   const { id } = req.params
-  Note.deleteOne({ id: id })
+  Note.deleteOne({ _id: id })
     .then(result => res.json(result))
     .catch(error => next(error))
 })
