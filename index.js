@@ -14,6 +14,7 @@ require('./mongoose')
 // routes
 const notesRoute = require('./routes/notes')
 const usersRoute = require('./routes/users')
+const loginRoute = require('./routes/login')
 const notFound = require('./middleware/notFound')
 const handleErrors = require('./middleware/handleErrors')
 
@@ -23,6 +24,7 @@ app.get('/', (req, res) => {
 
 app.use('/api/notes', notesRoute)
 app.use('/api/users', usersRoute)
+app.use('/api/login', loginRoute)
 app.use(notFound)
 app.use(handleErrors)
 

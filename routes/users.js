@@ -3,12 +3,17 @@ const express = require('express')
 const router = express.Router()
 const User = require('../model/users')
 
-router.get('/', (req, res) => {
-  User.find()
-    .then(notes => {
-      res.json(notes)
+router.get('/', async (req, res) => {
+  try {
+    const notes = await User.find({}).populate('notes', {
+      content: 1,
+      date: 1,
+      learned: 1
     })
-    .catch(error => res.json(error))
+    return res.json(notes)
+  } catch (error) {
+    return res.status(404).json(error)
+  }
 })
 
 router.post('/', async (req, res, next) => {

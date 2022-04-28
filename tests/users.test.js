@@ -16,6 +16,15 @@ beforeEach(async () => {
   }
 })
 
+describe('Get api/users', () => {
+  test('should get all the users correctly', async () => {
+    await api
+      .get('/api/users')
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+  })
+})
+
 describe('POST api/users', () => {
   test('should add new user correctly', async () => {
     const usersAtStart = await getAllUsers()

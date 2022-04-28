@@ -20,6 +20,9 @@ const userSchema = mongoose.Schema({
       ref: 'Note'
     }],
     required: false
+  },
+  token: {
+    type: String
   }
 })
 
