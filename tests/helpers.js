@@ -28,6 +28,7 @@ async function getFirstUser () {
 
 async function getUser (username) {
   const user = await User.findOne({ username: username })
+  console.log({ user, username })
   return user
 }
 
@@ -41,6 +42,13 @@ async function getToken () {
       expiresIn: '2h'
     }
   )
+}
+
+async function deleteAllnotesFor (id) {
+  const delNotesUser = {
+    notes: []
+  }
+  await User.findByIdAndUpdate(id, delNotesUser, { new: true })
 }
 
 // notes
@@ -59,7 +67,6 @@ const initialNotes = [
 
 async function getAllnotes () {
   const token = await getToken()
-  console.log({ token })
   return await api.get('/api/notes').set('authorization', `${AUTH_METHOD} ${token}`)
 }
 
@@ -80,6 +87,7 @@ module.exports = {
   getFirstUser,
   getUser,
   getToken,
+  deleteAllnotesFor,
   initialNotes,
   getAllnotes,
   getAllNotesProps

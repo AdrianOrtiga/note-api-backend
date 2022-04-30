@@ -15,18 +15,19 @@ router.get('/', auth, (req, res) => {
 router.post('/', auth, async (req, res) => {
   const {
     content,
-    learned = false,
-    username
+    learned = false
   } = req.body
 
-  try {
-    const user = await User.findOne({ username })
+  const id = req.user.id
 
+  try {
+    const user = await User.findById(id)
+    console.log(user)
     if (!content) {
       return res.status(400).json({ error: 'content is missing' })
     }
     const newNote = new Note({
-      userId: user._id,
+      userId: id,
       content,
       learned
     })

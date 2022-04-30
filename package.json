@@ -9,6 +9,7 @@
     "lint": "eslint .",
     "test": "cross-env NODE_ENV=test PORT=1234 jest --verbose --silent --detectOpenHandles --maxWorkers=1",
     "testUsers": "cross-env NODE_ENV=test PORT=1235 jest --verbose --silent tests/users.test.js",
+    "testNotes": "cross-env NODE_ENV=test PORT=1235 jest --verbose tests/notes.test.js",
     "test:watch": "npm run test -- --watch"
   },
   "keywords": [],

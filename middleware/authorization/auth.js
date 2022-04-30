@@ -15,8 +15,7 @@ const verifyToken = (req, res, next) => {
     const decoded = jwt.verify(token, config.TOKEN_KEY)
     req.user = decoded
   } catch (error) {
-    // return res.status(401).send('A token is required for authentication or invalid')
-    return next(error)
+    return res.status(401).json({ error: 'A token is required for authentication or invalid' })
   }
   return next()
 }

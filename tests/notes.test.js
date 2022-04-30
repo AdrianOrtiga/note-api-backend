@@ -9,6 +9,7 @@ const {
   AUTH_METHOD,
   initialNotes,
   getFirstUser,
+  deleteAllnotesFor,
   getAllnotes,
   getAllNotesProps,
   getUser,
@@ -23,6 +24,8 @@ beforeEach(async () => {
     const user = await getFirstUser()
     if (user === undefined) throw new Error('user undifined')
 
+    deleteAllnotesFor(user.id)
+
     const { content, learned, date } = note
     const newNote = new Note({
       content,
@@ -33,7 +36,7 @@ beforeEach(async () => {
     await newNote.save()
   }
 })
-// *********************************************************
+// ********************************************************* GET
 
 describe('GET /api/notes', () => {
   test('should return a 401 if no user has log in', async () => {
@@ -85,17 +88,16 @@ describe('GET /api/notes', () => {
       .expect('Content-Type', /application\/json/)
   })
 })
-// *********************************************************
+// ********************************************************* POST
 
 describe('POST /api/notes', () => {
   test('should add a new note correctly', async () => {
     const newNote = {
-      username: 'adridev',
       content: 'adfe daefe'
     }
 
     const token = await getToken()
-
+    console.log({ auth: `${AUTH_METHOD} ${token}` })
     await api
       .post('/api/notes')
       .set('authorization', `${AUTH_METHOD} ${token}`)
@@ -109,7 +111,7 @@ describe('POST /api/notes', () => {
     expect(res.body).toHaveLength(initialNotes.length + 1)
 
     const notesIds = res.body.map(note => note.id)
-    const user = await getUser(newNote.username)
+    const user = await getUser('adridev')
     const notesUserId = [user.notes.toString()]
     expect(typeof notesUserId[0]).toBe('string')
     expect(notesIds).toEqual(expect.arrayContaining(notesUserId))
@@ -122,7 +124,6 @@ describe('POST /api/notes', () => {
 
     expect(userWithoutNote.username).toBe(username)
     const newNote = {
-      username: username,
       content: 'adfe daefe'
     }
 
@@ -145,7 +146,7 @@ describe('POST /api/notes', () => {
     expect(contents).toContain(newNote.content)
     expect(res.body).toHaveLength(initialNotes.length + 1)
 
-    const userWithNote = await getUser(newNote.username)
+    const userWithNote = await getUser('adridev')
     const notesUserId = [userWithNote.notes.toString()]
     expect(typeof notesUserId[0]).toBe('string')
   })
@@ -167,27 +168,8 @@ describe('POST /api/notes', () => {
     const res = await getAllnotes()
     expect(res.body).toHaveLength(initialNotes.length)
   })
-  // -----------------------------------------------------------------
-
-  test('should not add a note with an invalid id', async () => {
-    const newNote = {
-      userId: 1,
-      content: 'adfe daefe'
-    }
-
-    const token = await getToken()
-    await api
-      .post('/api/notes')
-      .set('authorization', `${AUTH_METHOD} ${token}`)
-      .send(newNote)
-      .expect(400)
-      .expect('Content-Type', /application\/json/)
-
-    const res = await getAllnotes()
-    expect(res.body).toHaveLength(initialNotes.length)
-  })
 })
-// *********************************************************
+// ********************************************************* PUT
 
 describe('PUT /api/notes', () => {
   test('should update a note correctly', async () => {
@@ -214,7 +196,7 @@ describe('PUT /api/notes', () => {
     expect(res.body[0].learned).toBe(true)
   })
 })
-// *********************************************************
+// ********************************************************* DELETE
 
 describe('DELETE /api/notes', () => {
   test('should delete a note correctly', async () => {
