@@ -25,6 +25,12 @@ app.get('/', (req, res) => {
 app.use('/api/notes', notesRoute)
 app.use('/api/users', usersRoute)
 app.use('/api/login', loginRoute)
+
+if (process.env.NODE_ENV === 'test') {
+  const testingRoute = require('./routes/testing')
+  app.use('/api/testing', testingRoute)
+}
+
 app.use(notFound)
 app.use(handleErrors)
 

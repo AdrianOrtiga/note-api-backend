@@ -1,5 +1,7 @@
 const mongoose = require('mongoose')
 
+console.log(process.env.NODE_ENV)
+
 const connectionString = process.env.NODE_ENV === 'test'
   ? process.env.DATABASE_URL_TEST
   : process.env.DATABASE_URL
